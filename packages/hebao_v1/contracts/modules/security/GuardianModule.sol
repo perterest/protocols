@@ -37,7 +37,7 @@ contract GuardianModule is SecurityModule
     mapping (address => mapping(address => uint)) public pendingRemovals;
 
     event GuardianAdditionPending   (address indexed wallet, address indexed guardian, uint confirmAfter);
-    event GuardianAdded             (address indexed wallet, address indexed guardian);
+    event GuardianAdded             (address indexed wallet, address indexed guardian, bool isWallet);
     event GuardianAdditionCancelled (address indexed wallet, address indexed guardian);
 
     event GuardianRemovalPending    (address indexed wallet, address indexed guardian, uint confirmAfter);
@@ -74,7 +74,8 @@ contract GuardianModule is SecurityModule
 
         if (controller.securityStore().numGuardians(wallet) == 0) {
             controller.securityStore().addGuardian(wallet, guardian);
-            emit GuardianAdded(wallet, guardian);
+            bool isWallet = (controller.walletRegistry().isWallet(guardian));
+            emit GuardianAdded(wallet, guardian, isWallet);
         } else {
             uint confirmStart = pendingAdditions[wallet][guardian];
             require(confirmStart == 0 || now > confirmStart + confirmPeriod, "ALREADY_PENDING");
@@ -97,7 +98,9 @@ contract GuardianModule is SecurityModule
         require(now > confirmStart && now < confirmStart + confirmPeriod, "EXPIRED");
         controller.securityStore().addGuardian(wallet, guardian);
         delete pendingAdditions[wallet][guardian];
-        emit GuardianAdded(wallet, guardian);
+
+        bool isWallet = (controller.walletRegistry().isWallet(guardian));
+        emit GuardianAdded(wallet, guardian, isWallet);
     }
 
     function cancelGuardianAddition(
