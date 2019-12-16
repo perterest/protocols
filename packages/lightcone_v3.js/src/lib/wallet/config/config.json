@@ -124,6 +124,19 @@
       "allowanceWarn": "50000000000000000000",
       "precision": 6,
       "minTradeValue": 0.001
+    },
+    {
+      "id": 3,
+      "symbol": "USDT",
+      "name": "USD token",
+      "digits": 2,
+      "address": "0x3B1a9A35acc881230e8c4b76091A3cc60A47fb9C",
+      "unit": "USDT",
+      "website": "https://coinbase.com",
+      "allowance": "1000000000000000000000",
+      "allowanceWarn": "50000000000000000000",
+      "precision": 6,
+      "minTradeValue": 0.001
     }
   ]
 }
