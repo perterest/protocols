@@ -12,10 +12,6 @@
     "allowJs": true,
     "esModuleInterop": true
   },
-  "include": [
-    "./node_modules/types-bn/index.d.ts",
-    "./globals.d.ts",
-    "src/**/*"
-  ],
+  "include": ["./node_modules/types-bn/index.d.ts", "./globals.d.ts"],
   "exclude": []
 }
