@@ -78,7 +78,7 @@
     {
       "market": "LRC-USDT",
       "baseToken": "LRC",
-      "quoteToken": "WETH",
+      "quoteToken": "USDT",
       "pricePrecision": 6,
       "amountPrecision": 5,
       "totalPrecision": 5,
