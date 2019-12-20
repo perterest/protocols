@@ -76,7 +76,7 @@
       "maxLevel": 5
     },
     {
-      "market": "LRC-WETH",
+      "market": "LRC-USDT",
       "baseToken": "LRC",
       "quoteToken": "WETH",
       "pricePrecision": 6,
