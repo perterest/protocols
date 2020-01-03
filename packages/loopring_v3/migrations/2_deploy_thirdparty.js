@@ -6,18 +6,22 @@ module.exports = function(deployer, network, accounts) {
   var deployer_ = deployer;
 
   // common deployment
-
-  deployer_
-    .then(() => {
-      return Promise.all([
-        deployer.deploy(Cloneable),
-        deployer.deploy(BatchVerifier)
-      ]);
-    })
-    .then(() => {
-      console.log(">>>>>>>> contracts deployed by deploy_thirdparty:");
-      console.log("Cloneable:", Cloneable.address);
-      console.log("BatchVerifier:", BatchVerifier.address);
-      console.log("");
-    });
+  if (network != "live" && network != "live-fork") {
+    deployer_
+      .then(() => {
+        return Promise.all([
+          deployer.deploy(Cloneable),
+          deployer.deploy(BatchVerifier)
+        ]);
+      })
+      .then(() => {
+        console.log(">>>>>>>> contracts deployed by deploy_thirdparty:");
+        console.log("Cloneable:", Cloneable.address);
+        console.log("BatchVerifier:", BatchVerifier.address);
+        console.log("");
+      });
+  } else {
+    const batchVerifier = "0x40598B41cc17a7E56dd72F415E8223aaCCA94cF7";
+    console.log("BatchVerifier");
+  }
 };

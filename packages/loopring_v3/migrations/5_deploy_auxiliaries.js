@@ -59,42 +59,42 @@ module.exports = function(deployer, network, accounts) {
         ? "0xc0a47dFe034B400B47bDaD5FecDa2621de6c4d95"
         : "0xf5D915570BC477f9B8D6C0E980aA81757A3AaC36";
 
-    deployer_.then(() => {
-      return Promise.all([
-        deployer
-          .deploy(UniswapTokenSeller, factoryAddress, protocolFeeValutAddress)
-          .then(c => {
-            uniswapTokenSellerAddress = c.address;
-          })
-      ]);
-    });
+    // deployer_.then(() => {
+    //   return Promise.all([
+    //     deployer
+    //       .deploy(UniswapTokenSeller, factoryAddress, protocolFeeValutAddress)
+    //       .then(c => {
+    //         uniswapTokenSellerAddress = c.address;
+    //       })
+    //   ]);
+    // });
+  } else {
+    const BatchVerifier = artifacts.require("./thirdparty/BatchVerifier.sol");
+    const BlockVerifier = artifacts.require("./impl/BlockVerifier.sol");
+
+    deployer_
+      .then(() => {
+        return Promise.all([BatchVerifier.deployed()]);
+      })
+      .then(() => {
+        return Promise.all([deployer.link(BatchVerifier, BlockVerifier)]);
+      })
+      .then(() => {
+        return Promise.all([
+          deployer.deploy(BlockVerifier),
+          deployer.deploy(DowntimeCostCalculator)
+        ]);
+      })
+      .then(() => {
+        console.log(">>>>>>>> contracts deployed by deploy_aux:");
+        console.log("lrcAddress:", lrcAddress);
+        console.log("wethAddress:", wethAddress);
+        console.log("protocolFeeValutAddress:", protocolFeeValutAddress);
+        console.log("userStakingPoolAddress:", userStakingPoolAddress);
+        console.log("uniswapTokenSellerAddress:", uniswapTokenSellerAddress);
+        console.log("BlockVerifier:", BlockVerifier.address);
+        console.log("DowntimeCostCalculator:", DowntimeCostCalculator.address);
+        console.log("");
+      });
   }
-
-  const BatchVerifier = artifacts.require("./thirdparty/BatchVerifier.sol");
-  const BlockVerifier = artifacts.require("./impl/BlockVerifier.sol");
-
-  deployer_
-    .then(() => {
-      return Promise.all([BatchVerifier.deployed()]);
-    })
-    .then(() => {
-      return Promise.all([deployer.link(BatchVerifier, BlockVerifier)]);
-    })
-    .then(() => {
-      return Promise.all([
-        deployer.deploy(BlockVerifier),
-        deployer.deploy(DowntimeCostCalculator)
-      ]);
-    })
-    .then(() => {
-      console.log(">>>>>>>> contracts deployed by deploy_aux:");
-      console.log("lrcAddress:", lrcAddress);
-      console.log("wethAddress:", wethAddress);
-      console.log("protocolFeeValutAddress:", protocolFeeValutAddress);
-      console.log("userStakingPoolAddress:", userStakingPoolAddress);
-      console.log("uniswapTokenSellerAddress:", uniswapTokenSellerAddress);
-      console.log("BlockVerifier:", BlockVerifier.address);
-      console.log("DowntimeCostCalculator:", DowntimeCostCalculator.address);
-      console.log("");
-    });
 };
